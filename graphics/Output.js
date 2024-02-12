@@ -13,7 +13,7 @@ export default class {
   init() {
     this.component.powers = new Powers();
     this.helpers.controls = new Controls();
-    this.helpers.grid = new GridHelper(10, 10);
+    // this.helpers.grid = new GridHelper(10, 10);
   }
 
   render(t) {
@@ -23,7 +23,7 @@ export default class {
 
     Object.keys(this.helpers).forEach((key) => {
       if (typeof this.helpers[key].render === 'function') {
-        this.helpers[key].render();
+        this.helpers[key].render(t);
       }
     });
   }
@@ -40,6 +40,12 @@ export default class {
   resize() {
     Object.keys(this.component).forEach((key) => {
       this.component[key].resize();
+    });
+  }
+
+  setDebug(debug) {
+    Object.keys(this.component).forEach((key) => {
+      this.component[key].setDebug(debug);
     });
   }
 }

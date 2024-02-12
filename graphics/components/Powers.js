@@ -2,36 +2,44 @@ import { Group } from 'three';
 
 import Common from '../Common';
 
-import Floor from './starter/Floor';
-import Cube from './starter/Cube';
+import Floor from './house/Floor';
+import walls from './house/Walls';
+import Roof from './house/Roof';
 
 export default class {
-  Starter = {};
+  House = {};
 
   constructor() {
     this.init();
   }
 
   init() {
-    this.StarterGroup = new Group();
+    this.HouseGroup = new Group();
 
-    this.Starter.floor = new Floor();
-    this.Starter.Cube = new Cube(0, 1.2, 0);
+    this.House.floor = new Floor();
+    this.House.walls = new walls(0, 1, 0);
+    this.House.roof = new Roof(0, 3, 0);
 
-    Object.keys(this.Starter).forEach((key) => {
-      this.StarterGroup.add(this.Starter[key].mesh);
+    Object.keys(this.House).forEach((key) => {
+      Common.scene.add(this.House[key].mesh);
     });
 
-    Common.scene.add(this.StarterGroup);
+    Common.scene.add(this.HouseGroup);
   }
 
   dispose() {}
 
   render(t) {
-    Object.keys(this.Starter).forEach((key) => {
-      this.Starter[key].render(t);
+    Object.keys(this.House).forEach((key) => {
+      this.House[key].render(t);
     });
   }
 
   resize() {}
+
+  setDebug(debug) {
+    Object.keys(this.House).forEach((key) => {
+      this.House[key].setDebug(debug);
+    });
+  }
 }

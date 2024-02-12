@@ -1,4 +1,5 @@
 import Device from './pure/Device.js';
+import { Pane } from 'tweakpane';
 
 import { Scene, Color, PerspectiveCamera, WebGLRenderer } from 'three';
 
@@ -7,7 +8,7 @@ class Common {
   scene = new Scene();
   params = {
     sceneColor: 0x222222,
-    cameraFov: 50,
+    cameraFov: 75,
     cameraNear: 0.01,
     cameraFar: 100.0,
   };
@@ -22,7 +23,7 @@ class Common {
       this.params.cameraFar,
     );
 
-    this.camera.position.set(2, 2.0, 9.0);
+    this.camera.position.set(2, -2.0, 9.0);
     this.camera.lookAt(0, 0, 0);
     this.render = this.render.bind(this);
   }
@@ -37,12 +38,12 @@ class Common {
       antialias: false,
     });
 
-    this.renderer.physicallyCorrectLights = true;
-
     this.renderer.setPixelRatio(Device.pixelRatio);
+
+    this.debug = window.location.hash === '#debug' ? new Pane() : null;
   }
 
-  render(t) {
+  render() {
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -57,6 +58,11 @@ class Common {
     this.camera.aspect = Device.viewport.width / Device.viewport.height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(Device.viewport.width, Device.viewport.height);
+  }
+
+  setDebug() {
+    const { debug: pane } = this;
+    const folder = pane.addFolder({ title: 'Scene' });
   }
 }
 

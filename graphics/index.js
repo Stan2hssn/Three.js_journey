@@ -17,13 +17,18 @@ export default class {
     this.x = this.resize.bind(this);
 
     window.addEventListener('resize', this.x, false);
+
+    if (Common.debug) {
+      Common.setDebug();
+      this.output.setDebug(true);
+    }
   }
 
   render(t) {
-    requestAnimationFrame(this.render.bind(this));
     Input.render(t);
     Common.render(t);
     this.output.render(t);
+    requestAnimationFrame(this.render.bind(this));
   }
 
   resize() {
