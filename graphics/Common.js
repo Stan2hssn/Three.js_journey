@@ -23,7 +23,7 @@ class Common {
       this.params.cameraFar,
     );
 
-    this.camera.position.set(2, -2.0, 9.0);
+    this.camera.position.set(9, 13, 19.0);
     this.camera.lookAt(0, 0, 0);
     this.render = this.render.bind(this);
   }
@@ -33,7 +33,7 @@ class Common {
       canvas: canvas,
       alpha: false,
       stencil: false,
-      depth: false,
+      depth: true,
       powerPreference: 'high-performance',
       antialias: false,
     });

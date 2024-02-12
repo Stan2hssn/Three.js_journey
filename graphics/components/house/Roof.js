@@ -14,6 +14,7 @@ export default class {
 
     this.material = new MeshMatcapMaterial();
     this.material.matcap = this.textures.matcap;
+    this.material.depthWrite = true;
 
     this.init(posX, posY, posZ);
   }
@@ -22,7 +23,6 @@ export default class {
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.set(posX, posY, posZ);
     this.mesh.rotateY((3 * Math.PI) / 4);
-    console.log(this.mesh.rotateY);
   }
 
   dispose() {

@@ -5,8 +5,8 @@ export default class {
     this.init(posX, posY, posZ);
   }
 
-  init(posX = 0, posY = 0, posZ = 0) {
-    this.geometry = new PlaneGeometry(10, 10);
+  init(posX = 0, posY = -0.01, posZ = 0) {
+    this.geometry = new PlaneGeometry(20, 20);
     this.material = new MeshBasicMaterial({ color: 0x111111, side: 2 });
     this.mesh = new Mesh(this.geometry, this.material);
 
