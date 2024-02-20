@@ -1,7 +1,11 @@
+import { TextureLoader, MeshToonMaterial, NearestFilter } from 'three';
+
 import Device from '../../pure/Device';
 import Box from './instances/Box';
 import Sphere from './instances/Sphere';
 import Torus from './instances/Torus';
+
+import GradientMap from '/Texture/gradients/5.jpg';
 
 export default class {
   constructor($target, geometry) {
@@ -9,6 +13,10 @@ export default class {
     this.geometry = geometry;
 
     this.scale = 1;
+
+    this.gradientMap = new TextureLoader().load(GradientMap);
+    this.gradientMap.magFilter = NearestFilter;
+    console.log('this.gradientMap: ', this.gradientMap);
 
     this.geometryInstancer = {
       Box: Box,
@@ -23,7 +31,13 @@ export default class {
     const GeometryClass = this.geometryInstancer[this.geometry];
     if (GeometryClass) {
       this.instance = new GeometryClass();
+
       this.mesh = this.instance.mesh;
+      this.mesh.material = new MeshToonMaterial({
+        color: 0xafa6a3,
+        transparent: true,
+        gradientMap: this.gradientMap,
+      });
     } else {
       console.error(this.geometry);
     }
@@ -32,8 +46,7 @@ export default class {
   dispose() {}
 
   render(t) {
-    // this.mesh.rotation.x = Math.sin(t / 500);
-    // this.mesh.rotation.y = Math.cos(t / 500);
+    this.instance.render(t);
   }
 
   resize(scale, height, width) {
@@ -42,7 +55,11 @@ export default class {
     this.height = height;
     this.width = width;
 
-    this.mesh.scale.set(rect.width * this.scale, rect.height * this.scale, 1.0);
+    this.mesh.scale.set(
+      rect.width * this.scale,
+      rect.height * this.scale,
+      rect.width * this.scale,
+    );
 
     this.mesh.position.set(
       rect.left + rect.width * 0.5 - this.width * 0.5,

@@ -24,7 +24,10 @@ export default class {
     this.mesh.material.dispose();
   }
 
-  render(t) {}
+  render(t) {
+    this.mesh.rotation.x = Math.sin(t / 500);
+    this.mesh.rotation.y = Math.cos(t / 500);
+  }
 
   resize() {}
 }

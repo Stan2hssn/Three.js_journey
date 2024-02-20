@@ -6,7 +6,7 @@ export default class {
   }
 
   init() {
-    this.geometry = new TorusGeometry(0.5, 0.15, 16, 100);
+    this.geometry = new TorusGeometry(0.5, 0.15, 24, 100);
 
     this.material = new MeshBasicMaterial({ color: 0x5f4633 });
 
@@ -25,8 +25,8 @@ export default class {
   }
 
   render(t) {
-    // this.mesh.rotation.x = Math.sin(t / 500);
-    // this.mesh.rotation.y = Math.cos(t / 500);
+    this.mesh.rotation.x = Math.sin(t / 500);
+    this.mesh.rotation.y = Math.cos(t / 500);
   }
 
   resize() {}

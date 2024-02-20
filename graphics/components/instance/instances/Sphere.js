@@ -6,7 +6,7 @@ export default class {
   }
 
   init() {
-    this.geometry = new SphereGeometry(0.5, 16, 16);
+    this.geometry = new SphereGeometry(0.5, 24, 24);
 
     this.material = new MeshBasicMaterial({ color: 0x5f4633 });
 
@@ -24,7 +24,10 @@ export default class {
     this.mesh.material.dispose();
   }
 
-  render(t) {}
+  render(t) {
+    this.mesh.rotation.x = Math.sin(t / 500);
+    this.mesh.rotation.y = Math.cos(t / 500);
+  }
 
   resize() {}
 }
