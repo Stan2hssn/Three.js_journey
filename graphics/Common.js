@@ -5,6 +5,7 @@ import { Scene, Color, PerspectiveCamera, WebGLRenderer } from "three";
 class Common {
   // create a scene and the parameters for the scene
   scene = new Scene();
+  physics = null;
   params = {
     sceneColor: 0x222222,
     cameraFov: 50,
@@ -22,9 +23,8 @@ class Common {
       this.params.cameraFar,
     );
 
-    this.camera.position.set(2, 2.0, 9.0);
+    this.camera.position.set(20, 4.0, 20.0);
     this.camera.lookAt(0, 0, 0);
-    this.render = this.render.bind(this);
   }
 
   init({ canvas }) {

@@ -13,33 +13,33 @@ export default class {
   init() {
     this.component.powers = new Powers();
     this.helpers.controls = new Controls();
-    this.helpers.grid = new GridHelper(10, 10);
+    this.helpers.grid = new GridHelper(this.component.powers.floorParams, 10);
   }
 
   render(t) {
-    Object.keys(this.component).forEach((key) => {
-      this.component[key].render(t);
+    Object.keys(this.component).forEach((_) => {
+      this.component[_].render(t);
     });
 
-    Object.keys(this.helpers).forEach((key) => {
-      if (typeof this.helpers[key].render === "function") {
-        this.helpers[key].render();
+    Object.keys(this.helpers).forEach((_) => {
+      if (typeof this.helpers[_].render === "function") {
+        this.helpers[_].render();
       }
     });
   }
 
   dispose() {
-    Object.keys(this.component).forEach((key) => {
-      this.component[key].dispose();
+    Object.keys(this.component).forEach((_) => {
+      this.component[_].dispose();
     });
-    Object.keys(this.helpers).forEach((key) => {
-      this.helpers[key].dispose();
+    Object.keys(this.helpers).forEach((_) => {
+      this.helpers[_].dispose();
     });
   }
 
   resize() {
-    Object.keys(this.component).forEach((key) => {
-      this.component[key].resize();
+    Object.keys(this.component).forEach((_) => {
+      this.component[_].resize();
     });
   }
 }

@@ -1,17 +1,24 @@
-import { PlaneGeometry, MeshBasicMaterial, Mesh } from "three";
+import { PlaneGeometry, MeshBasicMaterial, Mesh, BoxGeometry } from "three";
 
 export default class {
-  constructor(posX, posY, posZ) {
-    this.init(posX, posY, posZ);
+  constructor(posX, posY, posZ, width, depth) {
+    this.width = width || 10;
+    this.height = 0.01;
+    this.depth = depth || 10;
+
+    this.posX = posX || 0;
+    this.posY = posY || 0;
+    this.posZ = posZ || 0;
+
+    this.init();
   }
 
-  init(posX = 0, posY = 0, posZ = 0) {
-    this.geometry = new PlaneGeometry(10, 10);
+  init() {
+    this.geometry = new BoxGeometry(this.width, this.height, this.depth);
     this.material = new MeshBasicMaterial({ color: 0x111111, side: 2 });
     this.mesh = new Mesh(this.geometry, this.material);
 
-    this.mesh.position.set(posX, posY, posZ);
-    this.mesh.rotation.x = -Math.PI / 2;
+    this.mesh.position.set(this.posX, this.posY - this.height / 2, this.posZ);
   }
 
   dispose() {
