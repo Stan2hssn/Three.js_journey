@@ -9,7 +9,8 @@ export default class Light {
     },
     posY: 6,
     color: 0xffffff,
-    intensity: 1,
+    dir_intensity: 1,
+    amb_intensity: 2,
   };
 
   constructor(posX, posY, posZ, color, intensity, targetX, targetY, targetZ) {
@@ -31,7 +32,7 @@ export default class Light {
   }
 
   directionalLight() {
-    this.light = new THREE.DirectionalLight(this.color, this.intensity);
+    this.light = new THREE.DirectionalLight(this.color, this.dir_intensity);
     this.light.position.set(this.posX, this.posY, this.posZ);
     this.light.target.position.set(this.targetX, this.targetY, this.targetZ);
 
@@ -49,7 +50,7 @@ export default class Light {
   }
 
   ambientLight() {
-    this.ambient = new THREE.AmbientLight(0x404040); // soft white light
+    this.ambient = new THREE.AmbientLight(0x404040, this.params.amb_intensity); // soft white light
     Common.scene.add(this.ambient);
   }
 
@@ -65,8 +66,24 @@ export default class Light {
   resize() {}
 
   setDebug(debug) {
-    const light = this.light;
+    const { light, ambient } = this;
     const params = this.params;
+
+    this.ambient = debug.addFolder({
+      title: "Ambient Light",
+      expanded: true,
+    });
+
+    this.ambient
+      .addBinding(params, "amb_intensity", {
+        label: "ambient Intensity",
+        min: 0,
+        max: 10,
+        step: 0.1,
+      })
+      .on("change", () => {
+        ambient.intensity = params.amb_intensity;
+      });
 
     // Add light properties to the debug UI
     this.directional = debug.addFolder({
@@ -76,14 +93,14 @@ export default class Light {
 
     // Intensity control
     this.directional
-      .addBinding(params, "intensity", {
+      .addBinding(params, "dir_intensity", {
         label: "Intensity",
         min: 0,
         max: 10,
         step: 0.1,
       })
       .on("change", () => {
-        light.intensity = params.intensity;
+        light.intensity = params.dir_intensity;
       });
 
     // Color control
