@@ -13,6 +13,11 @@ export default class {
   }
 
   init() {
+    if (Common.debug) {
+      Common.setDebug();
+      this.output.setDebug();
+    }
+
     this.resize();
     this.x = this.resize.bind(this);
 

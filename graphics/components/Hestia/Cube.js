@@ -1,24 +1,34 @@
-import { BoxGeometry, Mesh, MeshMatcapMaterial, TextureLoader } from "three";
+import {
+  BoxGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  MeshMatcapMaterial,
+  MeshStandardMaterial,
+  TextureLoader,
+} from "three";
 
 import Texture from "/Texture/texture.png";
 
 export default class {
   constructor(posX, posY, posZ) {
-    this.loader = new TextureLoader();
+    // this.loader = new TextureLoader();
 
-    this.textures = {
-      matcap: this.loader.load(Texture),
-    };
+    // this.textures = {
+    //   matcap: this.loader.load(Texture),
+    // };
     this.init(posX, posY, posZ);
   }
 
   init(posX = 0, posY = 0, posZ = 0) {
     this.geometry = new BoxGeometry(1, 1, 1);
 
-    this.material = new MeshMatcapMaterial();
-    this.material.matcap = this.textures.matcap;
+    this.material = new MeshStandardMaterial({ color: 0x222222, side: 2 });
+    // this.material.matcap = this.textures.matcap;
 
     this.mesh = new Mesh(this.geometry, this.material);
+
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
 
     this.mesh.position.set(posX, posY, posZ);
   }
