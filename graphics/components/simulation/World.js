@@ -1,7 +1,6 @@
 import { Clock, Vector3, Quaternion, Matrix4 } from "three";
-import Common from "../../Common";
 
-const RAPIER_PATH = "https://cdn.skypack.dev/@dimforge/rapier3d-compat";
+const RAPIER_PATH = "https://cdn.skypack.dev/@dimforge/rapier3d-compat@0.12.0";
 
 const frameRate = 60;
 
@@ -42,6 +41,7 @@ async function RapierPhysics() {
 
   const gravity = new Vector3(0.0, -9.81, 0.0);
   const world = new RAPIER.World(gravity);
+  const eventQueue = new RAPIER.EventQueue(true);
 
   const meshes = [];
   const meshMap = new WeakMap();
@@ -105,6 +105,7 @@ async function RapierPhysics() {
     const desc =
       mass > 0 ? RAPIER.RigidBodyDesc.dynamic() : RAPIER.RigidBodyDesc.fixed();
     desc.setTranslation(...position);
+
     if (quaternion !== null) desc.setRotation(quaternion);
 
     const body = world.createRigidBody(desc);
@@ -135,15 +136,39 @@ async function RapierPhysics() {
     body.setLinvel(velocity);
   }
 
-  //
+  function removeScene(scene) {
+    scene.traverse(function (child) {
+      if (child.isMesh) {
+        removeObject(child);
+      }
+    });
+  }
+
+  function removeObject(mesh) {
+    if (!meshMap.has(mesh)) {
+      return;
+    }
+
+    let body = meshMap.get(mesh);
+
+    // Check if it's an instanced mesh with multiple bodies
+    if (Array.isArray(body)) {
+      body.forEach((_) => {
+        world.removeRigidBody(_);
+      });
+    } else {
+      world.removeRigidBody(body);
+    }
+
+    // Clean up
+    meshMap.delete(mesh);
+  }
 
   const clock = new Clock();
 
   function step() {
     world.timestep = clock.getDelta();
     world.step();
-
-    //
 
     for (let i = 0, l = meshes.length; i < l; i++) {
       const mesh = meshes[i];
@@ -164,10 +189,12 @@ async function RapierPhysics() {
         mesh.instanceMatrix.needsUpdate = true;
         mesh.computeBoundingSphere();
       } else {
-        const body = meshMap.get(mesh);
+        if (meshMap.get(mesh) !== undefined) {
+          const body = meshMap.get(mesh);
 
-        mesh.position.copy(body.translation());
-        mesh.quaternion.copy(body.rotation());
+          mesh.position.copy(body.translation());
+          mesh.quaternion.copy(body.rotation());
+        }
       }
     }
   }
@@ -177,6 +204,7 @@ async function RapierPhysics() {
   setInterval(step, 1000 / frameRate);
 
   return {
+    removeScene: removeScene,
     setGravity: setGravity,
     setTimeStep: setTimeStep,
     addScene: addScene,
