@@ -4,6 +4,7 @@ import Common from "../Common";
 
 import Floor from "./Hestia/Floor";
 import Cube from "./Hestia/Cube";
+import Artemis from "./Artemis";
 import Light from "./Ether/Light";
 import Loader from "./Hestia/Loader";
 
@@ -16,6 +17,8 @@ export default class {
 
   constructor() {
     this.target = new Vector3(0, 0, 0);
+    this.Artemis = new Artemis();
+
     this.init();
   }
 
@@ -27,11 +30,17 @@ export default class {
     this.ether();
 
     Object.keys(this.Hestia.primaries).forEach((_) => {
+      this.Artemis.add(this.Hestia.primaries[_].mesh);
       this.HestiaGroup.add(this.Hestia.primaries[_].mesh);
     });
 
-    Object.keys(this.Hestia.models).forEach((_) => {
-      this.Hestia.models[_].load().then((mesh) => {
+    Object.keys(this.Hestia.models).forEach((_, i) => {
+      this.Hestia.models[_].load().then((__) => {
+        const mesh = __.mesh;
+        mesh.userData.loaderComponent = __;
+
+        this.Artemis.add(mesh);
+
         this.HestiaGroup.add(mesh);
       });
     });
@@ -93,6 +102,8 @@ export default class {
     Object.keys(this.Hestia.models).forEach((_) => {
       this.Hestia.models[_].render(t);
     });
+
+    this.Artemis.render();
   }
 
   resize() {}

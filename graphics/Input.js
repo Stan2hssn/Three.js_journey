@@ -9,6 +9,7 @@ class Input {
     this.delta = new Vector2();
     this.timer = null;
     this.count = 0;
+    this.clicked = null;
   }
 
   init() {
@@ -17,6 +18,9 @@ class Input {
       this.onDocumentMouseMove.bind(this),
       false,
     );
+
+    document.addEventListener("click", this.onDocumentClick.bind(this), false);
+
     document.addEventListener(
       "touchstart",
       this.onDocumentTouchStart.bind(this),
@@ -43,6 +47,10 @@ class Input {
 
   onDocumentMouseMove(event) {
     this.setCoords(event.clientX, event.clientY);
+  }
+
+  onDocumentClick(callback) {
+    this.clicked = callback;
   }
 
   onDocumentTouchStart(event) {

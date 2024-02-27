@@ -58,7 +58,7 @@ export default class {
             this.rotationY,
             this.rotationZ,
           );
-          resolve(this.mesh);
+          resolve(this);
         },
         undefined,
         reject,
